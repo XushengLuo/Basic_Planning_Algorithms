@@ -2,8 +2,7 @@ import queue
 
 class pathFinder(object):
     """ Class pathFinder is specific to the problem.
-    including:
-    1. """
+    """
 
     def __init__(self,accept_state, uni_cost=0.1):
         """Read the initial state from file

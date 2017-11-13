@@ -1,68 +1,39 @@
 # -*- coding: utf-8 -*-
 
-import Buchi
-import TS
-import PBA
-import OptRun
-import Problem
-"""
-    Propositonal Symbols:
-        true, false
-	    any lowercase string
+from Buchi import buchi_graph
+from TS import ts_graph
+from PBA import pba_graph
+from OptRun import opt_path
+from Problem import problemFormulation
 
-    Boolean operators:
-        !   (negation)
-        ->  (implication)
-	    <-> (equivalence)
-        &&  (and)
-        ||  (or)
+# +------------------------------------------+
+# |     construct transition system graph    |
+# +------------------------------------------+
 
-    Temporal operators:
-        []  (always)
-        <>  (eventually)
-        U   (until) 
-        V   (release)
-        X   (next)
-"""
-# construct transition system graph
-##############################
-# motion FTS
-regions, init_state, edges, uni_cost, formula = Problem.problemFormulation()
-ts_graph = TS.tsGraph(regions, init_state, edges, uni_cost)
-#print(ts_graph.succ)
+regions, init_state, edges, uni_cost, formula = problemFormulation().Formulation()
+ts_graph = ts_graph(regions, init_state, edges, uni_cost).tsGraph()
 
-# construct buchi graph
 
-formula = Buchi.formulaParser(formula)
-buchi_str = Buchi.execLtl2ba(formula).decode("utf-8")
-buchi_graph = Buchi.buchiGraph(buchi_str)
+# +------------------------------------------+
+# |            construct buchi graph         |
+# +------------------------------------------+
 
-#print(buchi_str)
-# construct product Buchi automaton
-pba_graph = PBA.pbaGraph(ts_graph, buchi_graph)
+buchi = buchi_graph(formula)
+buchi.formulaParser()
+buchi.execLtl2ba()
+buchi_graph = buchi.buchiGraph()
 
-# find the optimal path
-optimal_path = OptRun.optRun(pba_graph)
-optimal_pre = []
-for state in optimal_path[1][0]:
-    optimal_pre.append(ts_graph.node[state[0]]['label'][0])
 
-optimal_suf = [optimal_pre[-1]]
-for state in optimal_path[1][1]:
-    optimal_suf.append(ts_graph.node[state[0]]['label'][0])
+# +------------------------------------------+
+# |     construct product Buchi automaton    |
+# +------------------------------------------+
 
-print('The total cost of the path is: ', end='')
-print(optimal_path[0])
+pba_graph = pba_graph(ts_graph, buchi_graph).pbaGraph()
 
-print('The prefix path is:    ', end='')
-for region in optimal_pre[0:-3]:
-    print(region + ' -> ', end='')
-print(optimal_pre[-3])
+# +------------------------------------------+
+# |          find the optimal path           |
+# +------------------------------------------+
 
-print('The suffix path is:    ', end='')
-if optimal_suf.__len__() == 2:
-    print(optimal_suf[0])
-else:
-    for region in optimal_suf[0:-3]:
-        print(region + ' -> ', end='')
-    print(optimal_suf[-3])
+optimal_path = opt_path(pba_graph)
+optimal_path.optRun()
+optimal_path.printOptPath(ts_graph)
