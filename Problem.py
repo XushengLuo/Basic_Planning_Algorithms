@@ -59,10 +59,11 @@ def problemFormulation():
             ((2, 1, 1), (2, 2, 1))
             ]
     uni_cost = 0.1
+    #formula = '([]<>c1)'
 
-    #formula = '([]<>r4) && ([]<>r3) && ([]<>r6)'  # inspect room r3, r4, r6 infinitely often
-    #formula = '<>(rb && <>b) && <>[]r1'               # pick red ball to one basket and visit r1 infinitely often
-    #formula =  '<>(rb && <>b) && <>[]r1 && [](rb -> X(!gb U b)) && <>(gb && <>b) && [](gb -> X(!rb U b))'
-    formula = '<>(rb && <>(b && r2)) && <>[]r1 && [](rb -> X(!gb U b)) && <>(gb && <>(b && r4)) && [](gb -> X(!rb U b))'
-
+    #formula = '<>(rb && <>b) && <>[]r1'               # \phi 1  pick red ball to one basket and visit r1 infinitely often
+    #formula =  '<>(rb && <>b) && <>[]r1 && [](rb -> X(!gb U b)) && <>(gb && <>b) && [](gb -> X(!rb U b))'  # \phi 2
+    formula = '<>(rb && <>(b && r2)) && <>[]r1 && [](rb -> X(!gb U b)) && <>(gb && <>(b && r4)) && [](gb -> X(!rb U b))'   #\phi 3
+    formula = '([]<>r4) && ([]<>r3) && ([]<>r6)'     # \phi 4 inspect room r3, r4, r6 infinitely often
+    #formula = '[]<>r1'
     return regions, init_state, edges, uni_cost, formula

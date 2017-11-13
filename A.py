@@ -63,9 +63,9 @@ class Node(object):
         optimal_path = []
 
         while node.state != root_state:
-            optimal_path.append(node.state[0])
+            optimal_path.append(node.state[:])
             node = node.parent
-        optimal_path.append(root_state[0])
+        optimal_path.append(root_state[:])
         return (path_cost+pre_cost, optimal_path[::-1])
 
 

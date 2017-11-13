@@ -45,10 +45,24 @@ pba_graph = PBA.pbaGraph(ts_graph, buchi_graph)
 optimal_path = OptRun.optRun(pba_graph)
 optimal_pre = []
 for state in optimal_path[1][0]:
-    optimal_pre.append(ts_graph.node[state]['label'][0])
+    optimal_pre.append(ts_graph.node[state[0]]['label'][0])
 
-optimal_suf = []
+optimal_suf = [optimal_pre[-1]]
 for state in optimal_path[1][1]:
-    optimal_suf.append(ts_graph.node[state]['label'][0])
-print(optimal_pre)
-print(optimal_suf)
+    optimal_suf.append(ts_graph.node[state[0]]['label'][0])
+
+print('The total cost of the path is: ', end='')
+print(optimal_path[0])
+
+print('The prefix path is:    ', end='')
+for region in optimal_pre[0:-3]:
+    print(region + ' -> ', end='')
+print(optimal_pre[-3])
+
+print('The suffix path is:    ', end='')
+if optimal_suf.__len__() == 2:
+    print(optimal_suf[0])
+else:
+    for region in optimal_suf[0:-3]:
+        print(region + ' -> ', end='')
+    print(optimal_suf[-3])
