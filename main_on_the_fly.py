@@ -2,9 +2,10 @@
 
 from Buchi import buchi_graph
 from TS import ts_graph
-from PBA import pba_graph
-from OptRun import opt_path
 from Problem import problemFormulation
+from AdjProd import adj_prod
+from networkx.classes.digraph import DiGraph
+from OptRun_on_the_fly import opt_path_on_the_fly
 import datetime
 
 start = datetime.datetime.now()
@@ -27,32 +28,14 @@ buchi_graph = buchi.buchiGraph()
 
 
 # +------------------------------------------+
-# |     construct product Buchi automaton    |
-# +------------------------------------------+
-
-pba_graph = pba_graph(ts_graph, buchi_graph).pbaGraph()
-
-
-# +------------------------------------------+
 # |          find the optimal path           |
 # +------------------------------------------+
 
-optimal_path = opt_path(pba_graph)
+pba = adj_prod(DiGraph(type='PBA', init=[], accept=[]), ts_graph, buchi_graph)
+pba.init_accept()
+
+optimal_path = opt_path_on_the_fly(ts_graph, buchi_graph, pba)
 optimal_path.optRun()
-optimal_path.printOptPath(ts_graph)
-
-
-
-# from AdjProd import adj_prod
-# from networkx.classes.digraph import DiGraph
-# from opt_on_the_fly import opt_path_on_the_fly
-#
-#
-# pba = adj_prod(DiGraph(type='PBA', init=[], accept=[]), ts_graph, buchi_graph)
-# pba.init_accept()
-#
-# optimal_path = opt_path_on_the_fly(ts_graph, buchi_graph, pba)
-# optimal_path.optRun()
-# optimal_path.printOptPath()
+optimal_path.printOptPath()
 
 print((datetime.datetime.now() - start).total_seconds())

@@ -1,10 +1,11 @@
 import queue
 
+
 class pathFinder(object):
     """ Class pathFinder is specific to the problem.
     """
 
-    def __init__(self,accept_state, uni_cost=0.1):
+    def __init__(self, accept_state, uni_cost=0.1):
         """Read the initial state from file
         """
         self.final_state = accept_state
@@ -21,7 +22,6 @@ class pathFinder(object):
 
         # state : ((set), 'string')
         return abs(state[0][0] - self.final_state[0][0]) + abs(state[0][1] - self.final_state[0][1])
-
 
     def genChild(self, parent_node, child_node, succ, step_cost):
         """Generate childnote according to possible actions of parent_node
@@ -40,11 +40,11 @@ class Node(object):
     3. Generating the path from current node to the root
     """
 
-    def __init__(self,state=()):
+    def __init__(self, state=()):
         """Initialize node, including state, parent, root_cost, path_cost
         """
 
-        self.state = state    # such as (0,1,2...,15)
+        self.state = state  # such as (0,1,2...,15)
         self.parent = None
         self.root_cost = 0
         self.path_cost = 0
@@ -65,11 +65,10 @@ class Node(object):
             optimal_path.append(node.state[:])
             node = node.parent
         optimal_path.append(root_state[:])
-        return (path_cost+pre_cost, optimal_path[::-1])
+        return (path_cost + pre_cost, optimal_path[::-1])
 
 
-def aStar(pba_graph, ini_state, accep_state, pre_cost):
-#def aStar(ini_state, accep_state, pre_cost, pba):     # for on the fly
+def aStar(ini_state, accep_state, pre_cost, pba):     # for on the fly
 
     # Request the init and goal state
     path_finder = pathFinder(accep_state)
@@ -84,7 +83,7 @@ def aStar(pba_graph, ini_state, accep_state, pre_cost):
     # a priority queue ordered by PATH-COST, with node as the only element
     frontier.put((root.path_cost, num_node, root))
 
-    #Initializing explored set  type: set
+    # Initializing explored set  type: set
     exporedSet = set()
 
     while True:
@@ -102,6 +101,7 @@ def aStar(pba_graph, ini_state, accep_state, pre_cost):
         if node.testGoal(path_finder.final_state):
             return root.Solution(node, root.state, pre_cost)
 
+
         # node with node.state has been expanded
         if node.state in exporedSet:
             continue
@@ -110,19 +110,18 @@ def aStar(pba_graph, ini_state, accep_state, pre_cost):
             exporedSet.add(node.state)
 
         # for each action in problem.ACTIONS(node.STATE) do
-        #path_finder.genAction(node.state)
-        
-        for (succ, cost) in iter(pba_graph.succ[node.state].items())  :
-        #for (succ, cost) in iter(pba.adjProd(node.state).items()):  # for on the fly
+        # path_finder.genAction(node.state)
+
+        for (succ, cost) in iter(pba.adjProd(node.state).items()):  # for on the fly
             # child CHILD-NODE(problem,node,action)
-            child_node =  Node()
+            child_node = Node()
             path_finder.genChild(node, child_node, succ, cost['cost'])
 
             # check if child.STATE is not in explored
             # don't check if child.STATE in frontier, when a node with higher path_cost is popped \
             # out, the node with same state but smaller path_cost will be popped out before it
 
-            if not child_node.state in exporedSet: # or ini_state==succ:
+            if not child_node.state in exporedSet:  # or ini_state==succ:
                 num_node = num_node + 1
-                #frontier.put((child_node.path_cost, num_node, child_node.root_cost, child_node.state, child_node.parent))
+                # frontier.put((child_node.path_cost, num_node, child_node.root_cost, child_node.state, child_node.parent))
                 frontier.put((child_node.path_cost, num_node, child_node))

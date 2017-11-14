@@ -19,9 +19,9 @@ class pba_graph(object):
         """ constrcut PBA graph, algorithm 1 in Chapter two Motion and Task Planning
         """
         
-        for t_state in self.ts_graph.node:
+        for t_state in self.ts_graph.nodes:
     
-            for b_state in self.buchi_graph.node:
+            for b_state in self.buchi_graph.nodes:
                 # new pba graph node
                 p_state = (t_state, b_state)
                 self.pba_graph.add_node(p_state)
@@ -36,7 +36,7 @@ class pba_graph(object):
                 for t_state_succ in self.ts_graph.succ[t_state]:
                     for b_state_succ in self.buchi_graph.succ[b_state]:
                         p_state_succ = (t_state_succ, b_state_succ)
-                        d = self.checkTranB(b_state, self.ts_graph.node[t_state]['label'], b_state_succ)
+                        d = self.checkTranB(b_state, self.ts_graph.nodes[t_state]['label'], b_state_succ)
                         if d >= 0 :
                             self.pba_graph.add_edge(p_state, p_state_succ, cost=self.ts_graph.edges[(t_state, t_state_succ)]['cost'] + self.alpha * d)
     
