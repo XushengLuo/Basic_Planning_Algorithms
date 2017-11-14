@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-
+"""This is the main function relating to PBA on-the-fly construction
+"""
 from Buchi import buchi_graph
 from TS import ts_graph
 from Problem import problemFormulation
 from AdjProd import adj_prod
 from networkx.classes.digraph import DiGraph
-from OptRun_on_the_fly import opt_path_on_the_fly
+from Opt_Run_on_the_fly import opt_path_on_the_fly
 import datetime
 
 start = datetime.datetime.now()
@@ -37,5 +38,5 @@ pba.init_accept()
 optimal_path = opt_path_on_the_fly(ts_graph, buchi_graph, pba)
 optimal_path.optRun()
 optimal_path.printOptPath()
-
+print('Total time to find the optimal path: ', end='')
 print((datetime.datetime.now() - start).total_seconds())

@@ -99,7 +99,8 @@ def aStar(ini_state, accep_state, pre_cost, pba):     # for on the fly
         # if problem.GOAL-TEST(node.STATE) then return SOLUTION(node)
 
         if node.testGoal(path_finder.final_state):
-            return root.Solution(node, root.state, pre_cost)
+            # if optimal path exists, return path and newest pba
+            return root.Solution(node, root.state, pre_cost), pba
 
 
         # node with node.state has been expanded
@@ -125,3 +126,5 @@ def aStar(ini_state, accep_state, pre_cost, pba):     # for on the fly
                 num_node = num_node + 1
                 # frontier.put((child_node.path_cost, num_node, child_node.root_cost, child_node.state, child_node.parent))
                 frontier.put((child_node.path_cost, num_node, child_node))
+    # if optimal path doesn't exist, return none and newest pba
+    return None, pba

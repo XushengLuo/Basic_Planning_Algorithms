@@ -26,7 +26,8 @@ class opt_path_on_the_fly(object):
         """
         for ini_state in self.pba.pba_graph.graph['init']:
             for accept_state in self.pba.pba_graph.graph['accept']:
-                p = {(ini_state, accept_state): A_on_the_fly.aStar(ini_state, accept_state, 0, self.pba)}
+                path, self.pba = A_on_the_fly.aStar(ini_state, accept_state, 0, self.pba)   # update self.pba for future calling
+                p = {(ini_state, accept_state): path}
                 self.pre_path.update(p)
 
     def sufPath(self):
@@ -37,7 +38,7 @@ class opt_path_on_the_fly(object):
             # find the optimal path from each succsseor of a given accepting state to itself
             for next_state in self.pba.pba_graph.succ[accept_state]:
                 pre_cost = self.pba.pba_graph.succ[accept_state][next_state]['cost']
-                next_path = A_on_the_fly.aStar(next_state, accept_state, pre_cost, self.pba)
+                next_path, self.pba = A_on_the_fly.aStar(next_state, accept_state, pre_cost, self.pba)   # update self.pba for future calling
                 # if one path from given succ of a given accepting state to itself exists
                 if next_path != None:
                     p = {(next_state, accept_state): next_path}
