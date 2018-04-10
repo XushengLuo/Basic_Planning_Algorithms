@@ -4,3 +4,4 @@
    *.css linguist-language=python
    *.html linguist-language=python
    *.png linguist-language=python
+   *.txt linguist-language=python
